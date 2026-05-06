@@ -46,7 +46,7 @@ export function OnboardingWizard() {
               <Clock className="h-6 w-6 text-primary-foreground" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Welcome to FreeSlot</h1>
+          <h1 className="text-3xl font-bold text-foreground">Welcome to Time Assistant</h1>
           <p className="mt-2 text-muted-foreground">
             Let's discover how much time you actually have. It'll only take 2 minutes.
           </p>
