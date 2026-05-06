@@ -43,13 +43,6 @@ function toTimeInput(d: Date): string {
   return format(d, 'HH:mm')
 }
 
-function applyTime(base: Date, hhmm: string): Date {
-  const [h, m] = hhmm.split(':').map(Number)
-  const next = new Date(base)
-  next.setHours(h ?? 0, m ?? 0, 0, 0)
-  return next
-}
-
 function toDateInput(d: Date): string {
   return format(d, 'yyyy-MM-dd')
 }
