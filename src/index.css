@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 213 31% 91%;
+    --card: 222 47% 14%;
+    --card-foreground: 213 31% 91%;
+    --popover: 222 47% 14%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 210 100% 56%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 222 47% 18%;
+    --secondary-foreground: 213 31% 91%;
+    --muted: 223 47% 18%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 216 34% 22%;
+    --accent-foreground: 213 31% 91%;
+    --destructive: 0 63% 55%;
+    --destructive-foreground: 213 31% 91%;
+    --border: 216 34% 22%;
+    --input: 216 34% 22%;
+    --ring: 210 100% 56%;
+    --radius: 0.75rem;
+    --free: 142 76% 36%;
+    --free-foreground: 0 0% 100%;
+    --fixed: 215 20% 45%;
+    --fixed-foreground: 0 0% 100%;
+    --chart-1: 210 100% 56%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 0 63% 55%;
+    --sidebar-background: 222 47% 9%;
+    --sidebar-foreground: 213 31% 91%;
+    --sidebar-primary: 210 100% 56%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 216 34% 22%;
+    --sidebar-accent-foreground: 213 31% 91%;
+    --sidebar-border: 216 34% 18%;
+    --sidebar-ring: 210 100% 56%;
+  }
+
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 210 100% 46%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 90%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 210 100% 46%;
+    --free: 142 76% 36%;
+    --free-foreground: 0 0% 100%;
+    --fixed: 215 14% 65%;
+    --fixed-foreground: 0 0% 100%;
+    --sidebar-background: 210 40% 96%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 210 100% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 90%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 88%;
+    --sidebar-ring: 210 100% 46%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* react-big-calendar overrides */
+.rbc-calendar {
+  @apply bg-card text-foreground rounded-xl;
+}
+.rbc-header {
+  @apply border-border text-muted-foreground text-xs font-medium py-2;
+}
+.rbc-month-view,
+.rbc-time-view,
+.rbc-agenda-view {
+  @apply border-border;
+}
+.rbc-day-bg + .rbc-day-bg,
+.rbc-month-row + .rbc-month-row,
+.rbc-header + .rbc-header {
+  @apply border-border;
+}
+.rbc-off-range-bg {
+  @apply bg-background opacity-50;
+}
+.rbc-today {
+  @apply bg-primary/10;
+}
+.rbc-event {
+  @apply rounded-md text-xs font-medium border-0 px-1.5 py-0.5;
+}
+.rbc-toolbar {
+  @apply mb-4 flex-wrap gap-2;
+}
+.rbc-toolbar button {
+  @apply text-foreground border-border hover:bg-accent rounded-lg text-sm px-3 py-1.5 transition-colors;
+}
+.rbc-toolbar button.rbc-active {
+  @apply bg-primary text-primary-foreground border-primary;
+}
+.rbc-time-slot {
+  @apply border-border;
+}
+.rbc-timeslot-group {
+  @apply border-border;
+}
+/* Current time indicator line + Apple-style label */
+.rbc-current-time-indicator {
+  background-color: #ef4444 !important;
+  height: 4px !important;
+  opacity: 0.95;
+  z-index: 10;
+}
+
+/* Small dot on the line */
+.rbc-current-time-indicator::before {
+  background-color: #ef4444 !important;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  left: -5.5px;
+  top: -3.5px;
+}
+
+/* Current time label on the LEFT side (Apple style) */
+.rbc-time-gutter .rbc-current-time-indicator-label {
+  position: absolute;
+  left: -78px;                    /* Adjust distance from time column if needed */
+  top: -10px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  z-index: 20;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ===== React Big Calendar grid line fix (dark mode) ===== */
+
+/* ===== DARK MODE ONLY ===== */
+.dark .rbc-time-slot {
+  border-top: 1px solid #0b1f3a !important;
+}
+
+.dark .rbc-time-content > * + * > * {
+  border-left: 1px solid #0b1f3a !important;
+}
+
+.dark .rbc-day-slot {
+  background-color: #0a192f;
+}
+
+/* Today column */
+.dark .rbc-today {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Header row */
+.dark .rbc-header {
+  background-color: #0a192f;
+  color: #e2e8f0;
+}
+
+/* Reduce space between time labels and grid */
+.rbc-time-gutter {
+  padding-right: 0 !important;
+}
+
+.rbc-time-gutter .rbc-label {
+  padding-right: 4px !important;
+  text-align: right;
+}
