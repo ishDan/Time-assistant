@@ -468,7 +468,7 @@ export function CalendarPage() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row md:h-full -m-4 md:m-0">
+    <div className="flex flex-col md:flex-row h-full -m-4 md:m-0">
       {showTrophy && <TrophyAnimation onDone={() => setShowTrophy(false)} />}
 
       <QuickAddDialog
@@ -480,7 +480,7 @@ export function CalendarPage() {
         onSubmit={handleQuickAddSubmit}
       />
 
-      <div className="flex-1 p-3 md:p-6 overflow-hidden flex flex-col min-h-[calc(100dvh-12rem)] md:min-h-0">
+      <div className="flex-1 p-3 md:p-6 overflow-hidden flex flex-col min-h-0">
         <div className="mb-3 md:mb-4 flex items-start md:items-center justify-between flex-shrink-0 gap-2">
           <div className="min-w-0">
             <h1 className="text-xl md:text-2xl font-bold">Calendar</h1>
