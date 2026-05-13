@@ -114,6 +114,17 @@
 .rbc-event {
   @apply rounded-md text-xs font-medium border-0 px-1.5 py-0.5;
 }
+/* Hide the time label inside event blocks — position in the grid communicates time.
+   Removing it gives short events (30 min) the full height for their title. */
+.rbc-event-label {
+  display: none !important;
+}
+.rbc-event-content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
 .rbc-toolbar {
   @apply mb-4 flex-wrap gap-2;
 }

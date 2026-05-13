@@ -176,7 +176,12 @@ function CalendarEventContent({ event }: { event: CalendarEvent }) {
       </span>
     )
   }
-  return <>{event.title}</>
+  return (
+    <span style={{ display: 'block', overflow: 'hidden', whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis', lineHeight: 1.3 }}>
+      {event.title}
+    </span>
+  )
 }
 
 export function CalendarPage() {
