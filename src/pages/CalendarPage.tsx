@@ -33,7 +33,7 @@ function eventPropGetter(event: CalendarEvent) {
   const resource = (event.resource ?? {}) as Record<string, unknown>
 
   const baseColors: Record<string, Record<string, string | number>> = {
-    sleep:    { backgroundColor: 'hsl(235 55% 48%)', border: '1px solid hsl(235 70% 65%)', color: '#fff' },
+    sleep:    { backgroundColor: 'hsl(215 20% 35%)', border: 'transparent' },
     fixed:    { backgroundColor: 'hsl(215 20% 35%)', border: 'transparent' },
     free:     { backgroundColor: 'hsl(142 76% 28%)', border: 'transparent' },
     user:     { backgroundColor: 'hsl(210 100% 40%)', border: 'transparent' },
@@ -475,7 +475,7 @@ export function CalendarPage() {
         onSubmit={handleQuickAddSubmit}
       />
 
-      <div className="flex-1 p-3 md:p-6 overflow-hidden flex flex-col min-h-[60vh] md:min-h-0">
+      <div className="flex-1 p-3 md:p-6 overflow-hidden flex flex-col min-h-[calc(100dvh-12rem)] md:min-h-0">
         <div className="mb-3 md:mb-4 flex items-start md:items-center justify-between flex-shrink-0 gap-2">
           <div className="min-w-0">
             <h1 className="text-xl md:text-2xl font-bold">Calendar</h1>
@@ -492,7 +492,8 @@ export function CalendarPage() {
                 onClick={handleMarkProductive}
               >
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                {isMarkedProductive ? 'Productive Day ✓' : 'Used My Spare Time Today'}
+                <span className="hidden sm:inline">{isMarkedProductive ? 'Productive Day ✓' : 'Used My Spare Time Today'}</span>
+                <span className="sm:hidden">{isMarkedProductive ? 'Done ✓' : 'Log Day'}</span>
               </Button>
             )}
             <Button
@@ -517,7 +518,7 @@ export function CalendarPage() {
 
         <div className="hidden md:flex mb-3 items-center gap-4 text-xs text-muted-foreground flex-wrap flex-shrink-0">
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: 'hsl(235 55% 48%)', border: '1px solid hsl(235 70% 65%)' }} />Sleep
+            <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: 'hsl(215 20% 35%)' }} />Sleep
           </span>
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-sm bg-fixed" />Fixed
@@ -596,7 +597,7 @@ export function CalendarPage() {
         </div>
       </div>
 
-      <aside className="w-full md:w-72 border-t md:border-t-0 md:border-l border-border p-4 md:p-5 flex flex-col gap-4 md:overflow-y-auto">
+      <aside className="hidden md:flex md:w-72 border-l border-border p-5 flex-col gap-4 overflow-y-auto">
         {selected && (
           <Card>
             <CardHeader className="pb-2 flex flex-row items-center justify-between gap-2">
@@ -694,6 +695,77 @@ export function CalendarPage() {
           </CardContent>
         </Card>
       </aside>
+
+      {/* ── Mobile: event detail bottom sheet ─────────────────────────── */}
+      {selected && (
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-50 bg-background border-t border-border rounded-t-2xl shadow-2xl max-h-[70vh] overflow-y-auto">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold truncate flex-1 mr-2">{selected.title}</h3>
+              <div className="flex items-center gap-1 shrink-0">
+                {selected.type !== 'recommendation' &&
+                  selected.type !== 'commute' &&
+                  selected.type !== 'buffer' && (
+                    <button
+                      onClick={() => handleDuplicateEvent(selected)}
+                      aria-label="Duplicate event"
+                      className="text-muted-foreground hover:text-foreground p-1.5 rounded hover:bg-accent"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </button>
+                  )}
+                <button onClick={() => setSelected(null)} aria-label="Close"
+                  className="text-muted-foreground hover:text-foreground p-1.5 rounded hover:bg-accent">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            <EventActions
+              event={selected}
+              onClose={() => { setSelected(null); setDaySnapshot(null) }}
+              onRemoveCustom={(id) => removeCustomEvent(id)}
+              onEditCustom={(id, patch) => { editCustomEvent(id, patch); setSelected(null) }}
+              onSkipToday={(key, id) => { captureSnapshot(key); setDayOverride(key, id, false) }}
+              onSkipRange={(key, scope, id) => { captureSnapshot(key); setRangeOverride(key, scope, id, false) }}
+              onEditBuffer={(key, id, m) => { captureSnapshot(key); setBufferOverride(key, id, m) }}
+              onResetBuffer={(key, id) => { captureSnapshot(key); clearBufferOverride(key, id) }}
+              onRetime={(key, id, startTime, durationMinutes) => {
+                captureSnapshot(key)
+                setTimeOverride(key, id, { startTime, durationMinutes })
+                setDayOverride(key, id, true)
+              }}
+              onResetTime={(key, id) => { captureSnapshot(key); clearTimeOverride(key, id) }}
+              resolvedTime={(key, id) =>
+                resolvedActivityTime(settings, new Date(`${key}T00:00:00`), id)
+              }
+              hasTimeOverride={(key, id) =>
+                settings.timeOverrides?.[key]?.[id] !== undefined
+              }
+              onAcceptRec={(id) => { acceptRecommendation(id); generateWeekRecs(startOfWeek(new Date(), { weekStartsOn: 0 })); setSelected(null) }}
+              onMaybeRec={(id) => { setRecommendationStatus(id, 'maybe'); setSelected(null) }}
+              onDeclineRec={(id) => { setRecommendationStatus(id, 'declined'); setSelected(null) }}
+              daySnapshot={daySnapshot}
+              onRestoreSnapshot={handleRestore}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ── Mobile: Quick Add FAB ──────────────────────────────────────── */}
+      {!selected && (
+        <button
+          className="md:hidden fixed bottom-20 right-4 z-40 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+          onClick={() => {
+            const start = new Date()
+            start.setMinutes(Math.ceil(start.getMinutes() / 15) * 15, 0, 0)
+            const end = new Date(start.getTime() + 60 * 60_000)
+            setQuickAddDraft({ start, end, snapped: false })
+          }}
+          aria-label="Add event"
+        >
+          <Plus className="h-6 w-6" />
+        </button>
+      )}
     </div>
   )
 }

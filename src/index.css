@@ -164,40 +164,140 @@
   pointer-events: none;
 }
 
-/* ===== React Big Calendar grid line fix (dark mode) ===== */
-
-/* ===== DARK MODE ONLY ===== */
-.dark .rbc-time-slot {
-  border-top: 1px solid #0b1f3a !important;
-}
-
-.dark .rbc-time-content > * + * > * {
-  border-left: 1px solid #0b1f3a !important;
-}
-
-.dark .rbc-day-slot {
-  background-color: #0a192f;
-}
-
-/* Today column */
-.dark .rbc-today {
-  background-color: rgba(59, 130, 246, 0.08) !important;
-}
-
-/* Header row */
-.dark .rbc-header {
-  background-color: #0a192f;
-  color: #e2e8f0;
+/* Ensure the calendar always uses the app's font stack */
+.rbc-calendar {
+  font-family: inherit !important;
 }
 
 /* Reduce space between time labels and grid */
 .rbc-time-gutter {
   padding-right: 0 !important;
 }
-
 .rbc-time-gutter .rbc-label {
   padding-right: 4px !important;
   text-align: right;
+}
+
+/* ===== DARK MODE — all elements use CSS variables for full consistency ===== */
+
+/* Toolbar: buttons */
+.dark .rbc-toolbar button {
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+  background-color: transparent !important;
+}
+.dark .rbc-toolbar button:hover {
+  background-color: hsl(var(--accent)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+.dark .rbc-toolbar button.rbc-active {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border-color: hsl(var(--primary)) !important;
+}
+
+/* Toolbar: date label ("May 13, 2026") */
+.dark .rbc-toolbar-label {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Time/day column backgrounds */
+.dark .rbc-day-slot,
+.dark .rbc-time-view {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Grid lines */
+.dark .rbc-time-slot {
+  border-top-color: hsl(var(--border)) !important;
+}
+.dark .rbc-timeslot-group {
+  border-bottom-color: hsl(var(--border)) !important;
+}
+.dark .rbc-time-content > * + * > * {
+  border-left-color: hsl(var(--border)) !important;
+}
+.dark .rbc-time-header-content {
+  border-left-color: hsl(var(--border)) !important;
+}
+.dark .rbc-time-header,
+.dark .rbc-time-content {
+  border-top-color: hsl(var(--border)) !important;
+}
+
+/* Today highlight */
+.dark .rbc-today {
+  background-color: hsl(var(--primary) / 0.08) !important;
+}
+
+/* Day/week column headers (Mon, Tue …) */
+.dark .rbc-header {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-bottom-color: hsl(var(--border)) !important;
+}
+
+/* Time gutter labels (1 AM, 2 AM …) */
+.dark .rbc-time-gutter .rbc-label,
+.dark .rbc-time-header-gutter {
+  color: hsl(var(--muted-foreground)) !important;
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Month view — day number cells */
+.dark .rbc-date-cell {
+  color: hsl(var(--foreground)) !important;
+}
+.dark .rbc-date-cell > a,
+.dark .rbc-date-cell > a:visited {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Month view — off-range (greyed adjacent-month) days */
+.dark .rbc-off-range {
+  color: hsl(var(--muted-foreground)) !important;
+}
+.dark .rbc-off-range-bg {
+  background-color: hsl(var(--background)) !important;
+  opacity: 0.5;
+}
+
+/* Month view — row separators */
+.dark .rbc-month-row + .rbc-month-row {
+  border-top-color: hsl(var(--border)) !important;
+}
+.dark .rbc-day-bg + .rbc-day-bg {
+  border-left-color: hsl(var(--border)) !important;
+}
+
+/* "Show X more" link in month view */
+.dark .rbc-show-more {
+  color: hsl(var(--primary)) !important;
+  background-color: transparent !important;
+}
+
+/* Agenda view */
+.dark .rbc-agenda-view table,
+.dark .rbc-agenda-table {
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+.dark .rbc-agenda-date-cell,
+.dark .rbc-agenda-time-cell {
+  color: hsl(var(--muted-foreground)) !important;
+  border-right-color: hsl(var(--border)) !important;
+}
+.dark .rbc-agenda-event-cell {
+  color: hsl(var(--foreground)) !important;
+}
+.dark .rbc-agenda-table tbody > tr + tr {
+  border-top-color: hsl(var(--border)) !important;
+}
+.dark .rbc-agenda-table tbody > tr > td {
+  background-color: hsl(var(--background)) !important;
+}
+.dark .rbc-agenda-empty {
+  color: hsl(var(--muted-foreground)) !important;
 }
 
 /* ===== Mobile-specific calendar tweaks (≤ 767px) ===== */
