@@ -163,6 +163,7 @@ function buildEndeavorRec(
     endeavorEstimatedMinutes: endeavor.estimatedMinutes,
     endeavorId: endeavor.id,
     endeavorColor: endeavor.color,
+    locationId: endeavor.locationId,
   }
 }
 

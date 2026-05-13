@@ -147,6 +147,8 @@ export interface Recommendation {
   endeavorId?: string
   /** Endeavor color for calendar block (hex) */
   endeavorColor?: string
+  /** Location where the endeavor takes place (triggers commute events on accept) */
+  locationId?: string
 }
 
 /** dateKey → free minutes confirmed productive */
@@ -177,6 +179,8 @@ export interface Endeavor {
   color: string
   createdAt: string
   priority?: Priority
+  /** Optional location where this endeavor happens (e.g. gym, office) */
+  locationId?: string
 }
 
 export interface FreeTimeSummary {

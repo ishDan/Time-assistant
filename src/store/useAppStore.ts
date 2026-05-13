@@ -15,6 +15,7 @@ import type {
 import { ACTIVITY_PRESETS } from '@/types'
 import { generateWeeklyRecommendations } from '@/utils/recommendations'
 import { buildDaySchedule } from '@/utils/daySchedule'
+import { getCommuteMinutes, getLocationName } from '@/utils/commute'
 import { startOfWeek, addWeeks, format } from 'date-fns'
 
 /** Per-day override state captured before an edit for rollback. */
@@ -211,9 +212,9 @@ export const useAppStore = create<AppState>()(
         set((s) => {
           const rec = s.recommendations.find((r) => r.id === id)
           if (!rec) return s
-          const start = new Date(`${rec.dateKey}T00:00:00`)
-          const eventStart = new Date(start.getTime() + rec.startMin * 60_000)
-          const eventEnd = new Date(start.getTime() + rec.endMin * 60_000)
+          const base = new Date(`${rec.dateKey}T00:00:00`)
+          const eventStart = new Date(base.getTime() + rec.startMin * 60_000)
+          const eventEnd = new Date(base.getTime() + rec.endMin * 60_000)
           const newEvent: CalendarEvent = {
             id: `user-${rec.id}`,
             title: rec.title,
@@ -228,6 +229,42 @@ export const useAppStore = create<AppState>()(
               endeavorColor: rec.endeavorColor,
             },
           }
+
+          const newEvents: CalendarEvent[] = [newEvent]
+
+          // If the endeavor has a non-home location, inject commute legs.
+          const homeId = s.settings.homeLocationId
+          if (rec.locationId && rec.locationId !== homeId) {
+            const toMins = getCommuteMinutes(
+              s.settings.commuteMatrix, homeId, rec.locationId
+            )
+            const fromMins = getCommuteMinutes(
+              s.settings.commuteMatrix, rec.locationId, homeId
+            )
+            const homeName = getLocationName(s.settings.locations, homeId)
+            const destName = getLocationName(s.settings.locations, rec.locationId)
+            if (toMins > 0) {
+              newEvents.unshift({
+                id: `commute-to-${rec.id}`,
+                title: `🚗 ${homeName} → ${destName}`,
+                start: new Date(eventStart.getTime() - toMins * 60_000),
+                end: eventStart,
+                type: 'commute',
+                resource: { fromRecommendation: true },
+              })
+            }
+            if (fromMins > 0) {
+              newEvents.push({
+                id: `commute-from-${rec.id}`,
+                title: `🚗 ${destName} → ${homeName}`,
+                start: eventEnd,
+                end: new Date(eventEnd.getTime() + fromMins * 60_000),
+                type: 'commute',
+                resource: { fromRecommendation: true },
+              })
+            }
+          }
+
           // Track completed minutes for endeavor chunk cycling
           const sessionMinutes = rec.endMin - rec.startMin
           const prog = s.endeavorProgress ?? {}
@@ -238,7 +275,7 @@ export const useAppStore = create<AppState>()(
               }
             : prog
           return {
-            customEvents: [...s.customEvents, newEvent],
+            customEvents: [...s.customEvents, ...newEvents],
             recommendations: s.recommendations.map((r) =>
               r.id === id ? { ...r, status: 'accepted' as const } : r
             ),

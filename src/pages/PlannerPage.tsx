@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Trash2, Clock, Sparkles } from 'lucide-react'
+import { Plus, Trash2, Clock, Sparkles, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -128,6 +128,15 @@ export function PlannerPage() {
                     <Badge variant="outline" className="text-xs">
                       {TIME_OF_DAY_LABELS[endeavor.preferredTimeOfDay]}
                     </Badge>
+                    {endeavor.locationId && endeavor.locationId !== settings.homeLocationId && (() => {
+                      const loc = settings.locations.find((l) => l.id === endeavor.locationId)
+                      return loc ? (
+                        <Badge variant="outline" className="gap-1 text-xs">
+                          <MapPin className="h-3 w-3" />
+                          {loc.icon} {loc.name}
+                        </Badge>
+                      ) : null
+                    })()}
                     {endeavor.priority && (
                       <Badge
                         variant="outline"
@@ -227,6 +236,28 @@ export function PlannerPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-2">
+              <Label>Location <span className="text-muted-foreground font-normal">(optional — triggers commute on accept)</span></Label>
+              <Select
+                value={form.locationId ?? 'none'}
+                onValueChange={(v) =>
+                  setForm((f) => ({ ...f, locationId: v === 'none' ? undefined : v }))
+                }
+              >
+                <SelectTrigger><SelectValue placeholder="Same as home / no commute" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">🏠 Home / no commute</SelectItem>
+                  {settings.locations
+                    .filter((loc) => loc.id !== settings.homeLocationId)
+                    .map((loc) => (
+                      <SelectItem key={loc.id} value={loc.id}>
+                        {loc.icon} {loc.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <Label>Color</Label>
               <div className="flex gap-2">
