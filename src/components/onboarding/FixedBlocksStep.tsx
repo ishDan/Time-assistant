@@ -244,7 +244,8 @@ export function FixedBlocksStep() {
                                 daysOfWeek: toggleDay(days, d.value),
                               })
                             }
-                            className={`h-7 w-8 rounded-md border text-xs font-medium transition ${
+                            style={{ touchAction: 'manipulation' }}
+                            className={`h-10 w-10 rounded-md border text-xs font-medium transition ${
                               on
                                 ? 'bg-primary text-primary-foreground border-primary'
                                 : 'bg-transparent text-muted-foreground border-border hover:bg-muted'

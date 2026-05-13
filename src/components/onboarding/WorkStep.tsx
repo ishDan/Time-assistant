@@ -101,16 +101,20 @@ export function WorkStep() {
 
       <div className="space-y-2">
         <Label>Days of week</Label>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {DAYS.map(({ dow, short }) => (
             <Button
               key={dow}
-              variant={work.daysOfWeek.includes(dow) ? 'default' : 'outline'}
+              type="button"
+              variant="outline"
               size="sm"
               onClick={() => toggleDay(dow)}
+              style={{ touchAction: 'manipulation' }}
               className={cn(
-                'h-9 w-9 rounded-full p-0 text-xs font-medium',
-                !work.daysOfWeek.includes(dow) && 'opacity-50'
+                'h-11 w-11 rounded-full p-0 text-xs font-medium transition-all',
+                work.daysOfWeek.includes(dow)
+                  ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                  : 'bg-muted text-muted-foreground border-border hover:bg-accent'
               )}
             >
               {short}
