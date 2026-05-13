@@ -206,6 +206,13 @@ export function buildDaySchedule(
     const baseStart = defaultStart ?? 0
     const baseEnd = baseStart + block.minutesPerDay
     const { startMin, endMin } = applyTime(block.id, baseStart, baseEnd)
+    // On non-work days, blocks anchored to the work location are treated as
+    // happening at home so the commute chain doesn't insert a spurious
+    // "Home → Work" leg for things like Lunch.
+    const blockLocationId =
+      !isWorkDay && block.locationId === settings.work.locationId
+        ? settings.homeLocationId
+        : block.locationId
     activities.push({
       kind: 'activity',
       id: `block-${block.id}`,
@@ -213,7 +220,7 @@ export function buildDaySchedule(
       title: block.label,
       startMin,
       endMin,
-      locationId: block.locationId,
+      locationId: blockLocationId,
     })
   }
 
@@ -225,6 +232,10 @@ export function buildDaySchedule(
       defaultStart,
       defaultStart + task.durationMinutes
     )
+    const taskLocationId =
+      !isWorkDay && task.locationId === settings.work.locationId
+        ? settings.homeLocationId
+        : task.locationId
     activities.push({
       kind: 'activity',
       id: `task-${task.id}`,
@@ -232,7 +243,7 @@ export function buildDaySchedule(
       title: task.name,
       startMin,
       endMin,
-      locationId: task.locationId,
+      locationId: taskLocationId,
     })
   }
 
