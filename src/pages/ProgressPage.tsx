@@ -136,8 +136,8 @@ export function ProgressPage() {
   }, [productivityLog])
 
   return (
-    <div className="h-full overflow-y-auto p-6">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <div className="h-full">
+      <div className="max-w-3xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold">My Progress</h1>

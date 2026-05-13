@@ -199,3 +199,40 @@
   padding-right: 4px !important;
   text-align: right;
 }
+
+/* ===== Mobile-specific calendar tweaks (≤ 767px) ===== */
+@media (max-width: 767px) {
+  .rbc-calendar {
+    font-size: 12px;
+  }
+  .rbc-toolbar {
+    @apply gap-1 text-xs;
+  }
+  .rbc-toolbar button {
+    @apply px-2 py-1 text-xs;
+  }
+  .rbc-toolbar-label {
+    @apply text-sm font-semibold;
+  }
+  .rbc-time-gutter,
+  .rbc-time-header-gutter {
+    font-size: 10px;
+  }
+  .rbc-time-gutter .rbc-current-time-indicator-label {
+    left: -54px !important;
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+  .rbc-header {
+    font-size: 10px;
+    padding: 4px 2px !important;
+  }
+  .rbc-event {
+    font-size: 10px;
+    padding: 1px 3px !important;
+  }
+  /* Make the calendar feel tap-friendly */
+  .rbc-day-slot .rbc-events-container {
+    margin-right: 4px;
+  }
+}

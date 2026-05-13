@@ -17,7 +17,7 @@ export function Sidebar() {
   const summary = buildFreeTimeSummary(settings)
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar px-4 py-6">
+    <aside className="hidden md:flex h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar px-4 py-6">
       {/* Logo */}
       <div className="mb-8 flex items-center gap-2.5 px-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">

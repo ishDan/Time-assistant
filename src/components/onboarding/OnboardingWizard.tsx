@@ -65,7 +65,7 @@ export function OnboardingWizard() {
         </div>
 
         <Card className="border-border shadow-xl">
-          <CardContent className="p-8">
+          <CardContent className="p-5 md:p-8">
             <div className="mb-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">

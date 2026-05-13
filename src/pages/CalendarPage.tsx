@@ -203,7 +203,12 @@ export function CalendarPage() {
     restoreDaySnapshot,
   } = useAppStore()
 
-  const [view, setView] = useState<(typeof Views)[keyof typeof Views]>(Views.WEEK)
+  // Week view is unusable on a phone — default to Day on small viewports.
+  const [view, setView] = useState<(typeof Views)[keyof typeof Views]>(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+      ? Views.DAY
+      : Views.WEEK
+  )
   const [date, setDate] = useState(new Date())
   const [selected, setSelected] = useState<CalendarEvent | null>(null)
   const [showTrophy, setShowTrophy] = useState(false)
@@ -458,7 +463,7 @@ export function CalendarPage() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex flex-col md:flex-row md:h-full -m-4 md:m-0">
       {showTrophy && <TrophyAnimation onDone={() => setShowTrophy(false)} />}
 
       <QuickAddDialog
@@ -470,15 +475,15 @@ export function CalendarPage() {
         onSubmit={handleQuickAddSubmit}
       />
 
-      <div className="flex-1 p-6 overflow-hidden flex flex-col">
-        <div className="mb-4 flex items-center justify-between flex-shrink-0">
-          <div>
-            <h1 className="text-2xl font-bold">Calendar</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
+      <div className="flex-1 p-3 md:p-6 overflow-hidden flex flex-col min-h-[60vh] md:min-h-0">
+        <div className="mb-3 md:mb-4 flex items-start md:items-center justify-between flex-shrink-0 gap-2">
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold">Calendar</h1>
+            <p className="hidden md:block text-sm text-muted-foreground mt-0.5">
               {formatFreeTime(summary.todayFreeMinutes)} free today · {formatFreeTime(summary.weekFreeMinutes)} this week
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2 flex-wrap justify-end">
             {view === Views.DAY && (
               <Button
                 variant={isMarkedProductive ? 'default' : 'outline'}
@@ -510,7 +515,7 @@ export function CalendarPage() {
           </div>
         </div>
 
-        <div className="mb-3 flex items-center gap-4 text-xs text-muted-foreground flex-wrap flex-shrink-0">
+        <div className="hidden md:flex mb-3 items-center gap-4 text-xs text-muted-foreground flex-wrap flex-shrink-0">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: 'hsl(235 55% 48%)', border: '1px solid hsl(235 70% 65%)' }} />Sleep
           </span>
@@ -591,7 +596,7 @@ export function CalendarPage() {
         </div>
       </div>
 
-      <aside className="w-72 border-l border-border p-5 flex flex-col gap-4 overflow-y-auto">
+      <aside className="w-full md:w-72 border-t md:border-t-0 md:border-l border-border p-4 md:p-5 flex flex-col gap-4 md:overflow-y-auto">
         {selected && (
           <Card>
             <CardHeader className="pb-2 flex flex-row items-center justify-between gap-2">

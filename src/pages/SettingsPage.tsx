@@ -8,10 +8,10 @@ import { Separator } from '@/components/ui/separator'
 
 export function SettingsPage() {
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-xl md:text-2xl font-bold">Settings</h1>
+        <p className="text-xs md:text-sm text-muted-foreground mt-1">
           Adjust your schedule — the free-time engine updates instantly.
         </p>
       </div>

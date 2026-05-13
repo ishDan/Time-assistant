@@ -46,17 +46,18 @@ export function PlannerPage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="mb-8 flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Planner</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-6 md:mb-8 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-xl md:text-2xl font-bold">Planner</h1>
+          <p className="mt-1 text-xs md:text-sm text-muted-foreground">
             Your hobbies & side hustles — we'll find the best slots for them.
           </p>
         </div>
-        <Button onClick={() => setOpen(true)} className="gap-2">
+        <Button onClick={() => setOpen(true)} className="gap-2 shrink-0" size="sm">
           <Plus className="h-4 w-4" />
-          New Endeavor
+          <span className="hidden sm:inline">New Endeavor</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </div>
 
