@@ -569,7 +569,10 @@ export function CalendarPage() {
           .rbc-day-slot .rbc-time-slot { cursor: pointer; }
         `}</style>
 
-        <div ref={calendarWrapperRef} style={{ flex: 1, minHeight: 0 }}>
+        <div
+          ref={calendarWrapperRef}
+          className="flex-1 min-h-[480px] md:min-h-0"
+        >
           <DnDCalendar
             localizer={localizer}
             events={allEvents}
